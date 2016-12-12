@@ -1,4 +1,3 @@
-# spec/models/user_spec.rb
 require 'rails_helper'
 
 describe User do
@@ -18,6 +17,10 @@ describe User do
       user.password = 'foobar'
       expect(user).to be_valid
     end
+
+    it 'has many secrets' do
+      expect(user).to respond_to(:secrets)
+    end
   end
 
   context 'invalid data provided' do
@@ -31,11 +34,23 @@ describe User do
       expect(user).to_not be_valid
     end
 
-    it 'fails email validation' do
-      
+    it 'fails email validation when absent' do
       user.email = ''
       expect(user).to_not be_valid
+    end
 
+    it 'fails email validation when duplicate' do
+      duplicate_email = 'foo@bar.com'
+      create(:user, email: duplicate_email)
+      imposter = build(:user, email: duplicate_email)
+      expect(imposter).to_not be_valid
+    end
+
+    it 'fails password validation' do
+      user.password = 'b' * 5
+      expect(user).to_not be_valid
+      user.password = 'b' * 17
+      expect(user).to_not be_valid
     end
   end
 end

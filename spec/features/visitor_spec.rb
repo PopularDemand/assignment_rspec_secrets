@@ -35,8 +35,8 @@ end
 feature 'Visitor sign in' do
   context 'visitor provides valid data' do
     it 'allows registered users to sign in' do
-      user = create(:user)
-      sign_in(user)
+      user = create(:user, password: 'foobar')
+      sign_in(user.email, 'foobar')
       expect(current_path).to eq(root_path)
       expect(page).to have_content("Welcome, #{user.name}")
     end
@@ -44,7 +44,16 @@ feature 'Visitor sign in' do
 
   context 'visitor provides invalid data' do
     it 'disallows registered users to sign in' do
-      # TODO
+      user = create(:user, password: 'foobar')
+      sign_in(user.email, 'wrongpassword')
+      expect(page).to_not have_content("Welcome, #{user.name}")
     end
   end
+end
+
+feature 'Visitor authorization' do
+  it 'disallows creation of secrets' do
+    visit new_secret_path
+    expect(current_path).to eq(new_session_path)
+  end  
 end

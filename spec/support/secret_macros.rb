@@ -1,8 +1,8 @@
+
 module SecretMacros
-  
-  def create_secret
+  def create_secret(title, body)
     visit new_secret_path
-    fill_in_secret_form('this is title', 'body text')
+    fill_in_secret_form(title, body)
     click_on('Create Secret')
   end
 
@@ -10,5 +10,4 @@ module SecretMacros
     fill_in('secret_title', with: title)
     fill_in('secret_body', with: body)
   end
-
 end

@@ -44,10 +44,10 @@ describe Secret do
       expect(last_five.length).to eq(5)
     end
 
-    it 'the secrets w/ the 5 greatest ids' do
-      last_five = Secret.last_five
-      last_five_by_creation = Secret.order(created_at: :desc).limit(5)
-      expect(last_five.to_a).to eq(last_five_by_creation.to_a)
+    it 'returns the last five secrets to be created' do
+      last_five = Secret.last_five.to_a
+      last_five_by_creation = Secret.order(created_at: :desc).limit(5).to_a
+      expect(last_five).to eq(last_five_by_creation)
     end
   end
 end
